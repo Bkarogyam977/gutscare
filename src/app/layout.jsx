@@ -14,15 +14,15 @@ const geistSans = Geist({
 });
 
 export const metadata = {
-  title: "KIDNEY RAKSHAK Package 30 Days | BK Arogyam",
+  title: "NUTRIVEDA GutCare Capsule | Ayurvedic Gut Health | BK Arogyam",
   description:
-    "Kidney Rakshak 30-Day Ayurvedic Package – Powerful blend of Punarnava, Gokshura, Varuna & more. Supports kidney detox, stone prevention, and improved kidney function. Order now.",
+    "NUTRIVEDA GutCare Capsule – Ayurvedic herbal nutrition with Triphala, Ajwain, Jeera, Pudina, Hing & more. Supports healthy digestion, relieves gas, acidity, bloating & constipation. Order now.",
   keywords:
-    "kidney rakshak, kidney health package, ayurvedic kidney treatment, kidney stone remedy, punarnava gokshura, kidney detox, BK Arogyam",
+    "gutcare capsule, gut health, ayurvedic digestion, triphala ajwain jeera pudina hing, gas relief, acidity relief, constipation, bloating, nutriveda, BK Arogyam",
   openGraph: {
-    title: "KIDNEY RAKSHAK Package 30 Days | BK Arogyam",
+    title: "NUTRIVEDA GutCare Capsule | Ayurvedic Gut Health | BK Arogyam",
     description:
-      "30-Day Ayurvedic Kidney Care Package. Detox, stone prevention & improved kidney function with powerful herbs.",
+      "Ayurvedic herbal capsule with Triphala, Ajwain, Jeera, Pudina & Hing. Supports gut balance, digestion, and relieves gas, acidity & bloating.",
     type: "website",
   },
 };
