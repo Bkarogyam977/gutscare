@@ -1,0 +1,82 @@
+"use client";
+import { createContext, useContext, useState, useEffect } from "react";
+
+const CartContext = createContext(null);
+
+export function CartProvider({ children }) {
+  const [items, setItems] = useState([]);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("bk_cart");
+      if (saved) setItems(JSON.parse(saved));
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("bk_cart", JSON.stringify(items));
+  }, [items]);
+
+  const addToCart = (product, qty = 1) => {
+    setItems((prev) => {
+      const existing = prev.find((i) => i.id === product.id);
+      if (existing) {
+        return prev.map((i) =>
+          i.id === product.id ? { ...i, qty: i.qty + qty } : i
+        );
+      }
+      return [
+        ...prev,
+        {
+          id: product.id,
+          name: product.name,
+          price: product.retail_with_tax,
+          image: product.thumbnail,
+          unit: product.unit_data?.name || "",
+          qty,
+        },
+      ];
+    });
+    setDrawerOpen(true);
+  };
+
+  const updateQty = (id, qty) => {
+    if (qty <= 0) {
+      setItems((prev) => prev.filter((i) => i.id !== id));
+    } else {
+      setItems((prev) => prev.map((i) => (i.id === id ? { ...i, qty } : i)));
+    }
+  };
+
+  const removeItem = (id) => setItems((prev) => prev.filter((i) => i.id !== id));
+
+  const clearCart = () => setItems([]);
+
+  const totalItems = items.reduce((sum, i) => sum + i.qty, 0);
+  const totalPrice = items.reduce((sum, i) => sum + i.price * i.qty, 0);
+
+  return (
+    <CartContext.Provider
+      value={{
+        items,
+        addToCart,
+        updateQty,
+        removeItem,
+        clearCart,
+        totalItems,
+        totalPrice,
+        drawerOpen,
+        setDrawerOpen,
+      }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
+}
+
+export function useCart() {
+  const ctx = useContext(CartContext);
+  if (!ctx) throw new Error("useCart must be used within CartProvider");
+  return ctx;
+}
