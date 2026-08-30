@@ -5,7 +5,7 @@ import TrustBadges from "@/components/TrustBadges";
 import BenefitsSection from "@/components/BenefitsSection";
 import ProductDescription from "@/components/ProductDescription";
 import HowToUse from "@/components/HowToUse";
-import ReviewsSection from "@/components/ReviewsSection";
+import ProductReviews from "@/components/ProductReviews";
 import BlogSection from "@/components/BlogSection";
 import OrderCTA from "@/components/OrderCTA";
 import Footer from "@/components/Footer";
@@ -31,7 +31,7 @@ export default async function HomePage() {
       <BenefitsSection />
       <ProductDescription product={product} />
       <HowToUse product={product} />
-      <ReviewsSection reviews={reviews} avgRating={avgRating} />
+      <ProductReviews />
       {product.blogs_data?.length > 0 && (
         <BlogSection blogs={product.blogs_data} />
       )}
