@@ -13,7 +13,7 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-export const metadata = {
+const baseMetadata = {
   title: "NUTRIVEDA GutCare Capsule | Ayurvedic Gut Health | BK Arogyam",
   description:
     "NUTRIVEDA GutCare Capsule – Ayurvedic herbal nutrition with Triphala, Ajwain, Jeera, Pudina, Hing & more. Supports healthy digestion, relieves gas, acidity, bloating & constipation. Order now.",
@@ -26,6 +26,21 @@ export const metadata = {
     type: "website",
   },
 };
+
+export async function generateMetadata() {
+  const headersList = await headers();
+  const slug = headersList.get("x-tenant-slug") || "default";
+  const tenant = getTenantConfig(slug);
+
+  return {
+    ...baseMetadata,
+    ...(tenant.facebook_domain_verification && {
+      other: {
+        "facebook-domain-verification": tenant.facebook_domain_verification,
+      },
+    }),
+  };
+}
 
 export default async function RootLayout({ children }) {
   // Read subdomain slug injected by middleware

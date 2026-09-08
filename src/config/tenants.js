@@ -19,6 +19,7 @@ export const DEFAULT_TENANT = {
   phone: "918081222333",        // tel: href uses this  (+91 prefix included)
   whatsapp: "918081222333",     // wa.me link uses this
   display_phone: "+91 80812 22333",
+  facebook_domain_verification: "",
   pixels: {
     facebook_pixel_id: "",
     google_analytics_id: "",
@@ -35,6 +36,7 @@ export const TENANTS = {
     phone: "918081222333",
     whatsapp: "918081222333",
     display_phone: "+91 80812 22333",
+    facebook_domain_verification: "",
     pixels: {
       facebook_pixel_id: "",   // ← paste Arya Ayurveda's FB Pixel ID here
       google_analytics_id: "", // ← paste their GA4 ID here
@@ -50,6 +52,7 @@ export const TENANTS = {
     phone: "918081222333",
     whatsapp: "918081222333",
     display_phone: "+91 80812 22333",
+    facebook_domain_verification: "",
     pixels: {
       facebook_pixel_id: "",   // ← paste DigiLife's FB Pixel ID here
       google_analytics_id: "",
@@ -65,6 +68,7 @@ export const TENANTS = {
     phone: "918081222333",
     whatsapp: "918081222333",
     display_phone: "+91 80812 22333",
+    facebook_domain_verification: "",
     pixels: {
       facebook_pixel_id: "1439717144717984",
       google_analytics_id: "",
@@ -80,6 +84,7 @@ export const TENANTS = {
     phone: "918081222333",
     whatsapp: "918081222333",
     display_phone: "+91 80812 22333",
+    facebook_domain_verification: "nl64o43le646fk3cwt78ogtv5ncrxy",
     pixels: {
       facebook_pixel_id: "1745468096666289",
       google_analytics_id: "",
