@@ -254,7 +254,7 @@ export default function CheckoutPage() {
         }
 
         const { EncData, MerchantId, BankId, TerminalId } = payData;
-        const paymentUrl = `https://payment.bkarogyam.com/process_data/?EncData=${EncData}&MerchantId=${MerchantId}&BankId=${BankId}&TerminalId=${TerminalId}`;
+        const paymentUrl = `https://payment.bkarogyam.com/process_data/?${new URLSearchParams({ EncData, MerchantId, BankId, TerminalId }).toString()}`;
         setPaymentModalOpen(false);
         setSuccess({ order_id: orderData.order_id, total: grandTotal, payment_method: "online", payment_url: paymentUrl });
       } else {
