@@ -26,7 +26,72 @@ const STATES = [
   "West Bengal","Delhi","Jammu & Kashmir","Ladakh","Chandigarh","Puducherry",
 ];
 
-function OrderSuccess({ orderId, total, paymentMethod, onContinue }) {
+function PaymentPending({ orderId, total, paymentUrl, onCancel }) {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center px-4">
+      <div className="max-w-md w-full text-center bg-white rounded-2xl shadow-lg p-8 border border-blue-100">
+        {/* Pulsing payment icon */}
+        <div className="relative w-20 h-20 mx-auto mb-5">
+          <div className="absolute inset-0 rounded-full bg-blue-100 animate-ping opacity-50" />
+          <div className="relative w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center">
+            <CreditCardOutlined style={{ fontSize: 36, color: "#2563eb" }} />
+          </div>
+        </div>
+
+        <h1 className="text-2xl font-bold text-stone-900 mb-1">Awaiting Payment</h1>
+        <p className="text-stone-500 text-sm mb-4">Your order is reserved — complete the payment to confirm</p>
+
+        {orderId && (
+          <div className="bg-stone-50 rounded-xl px-4 py-3 mb-4 flex justify-between items-center">
+            <span className="text-stone-500 text-sm">Order ID</span>
+            <span className="font-mono font-semibold text-amber-600">#{orderId}</span>
+          </div>
+        )}
+        <div className="bg-stone-50 rounded-xl px-4 py-3 mb-6 flex justify-between items-center">
+          <span className="text-stone-500 text-sm">Amount</span>
+          <span className="font-bold text-stone-900 text-lg">{formatPrice(total)}</span>
+        </div>
+
+        <a
+          href={paymentUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block w-full mb-3"
+        >
+          <Button
+            type="primary"
+            size="large"
+            block
+            style={{ background: "#2563eb", borderColor: "#2563eb", fontWeight: 700, height: 52, fontSize: 16 }}
+          >
+            Open Payment Page →
+          </Button>
+        </a>
+
+        <p className="text-xs text-stone-400 mb-6">
+          Payment opens in a new tab — UPI · Debit/Credit Card · Net Banking
+        </p>
+
+        <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-700 text-left space-y-1 mb-6">
+          <p>1. Click "Open Payment Page" above</p>
+          <p>2. Complete your payment in the new tab</p>
+          <p>3. You will be redirected to a confirmation page</p>
+        </div>
+
+        <Button
+          size="small"
+          type="text"
+          onClick={onCancel}
+          style={{ color: "#9ca3af", fontSize: 12 }}
+        >
+          Cancel & go back to home
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+function OrderSuccess({ orderId, total, onContinue }) {
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white flex items-center justify-center px-4">
       <div className="max-w-md w-full text-center bg-white rounded-2xl shadow-lg p-8 border border-amber-100">
@@ -43,18 +108,12 @@ function OrderSuccess({ orderId, total, paymentMethod, onContinue }) {
         <p className="text-2xl font-bold text-amber-600 mt-2 mb-4">
           {formatPrice(total)}
         </p>
-        {paymentMethod === "online" ? (
-          <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-700 mb-6">
-            Payment window has been opened in a new tab. Complete your payment there.
-          </div>
-        ) : (
-          <div className="bg-amber-50 rounded-xl p-4 text-sm text-stone-600 mb-6 text-left space-y-1.5">
-            <p>✓ Our team will call you to confirm delivery</p>
-            <p>✓ Dispatch within 1–2 business days</p>
-            <p>✓ Delivery in 3–7 business days</p>
-            <p>✓ Pay on delivery in cash</p>
-          </div>
-        )}
+        <div className="bg-amber-50 rounded-xl p-4 text-sm text-stone-600 mb-6 text-left space-y-1.5">
+          <p>✓ Our team will call you to confirm delivery</p>
+          <p>✓ Dispatch within 1–2 business days</p>
+          <p>✓ Delivery in 3–7 business days</p>
+          <p>✓ Pay on delivery in cash</p>
+        </div>
         <Button
           type="primary"
           size="large"
@@ -83,12 +142,25 @@ export default function CheckoutPage() {
   const grandTotal = totalPrice + deliveryCharge;
   const isCODBlocked = grandTotal > COD_LIMIT;
 
-  if (success) {
+  if (success?.payment_method === "online") {
+    return (
+      <PaymentPending
+        orderId={success.order_id}
+        total={success.total}
+        paymentUrl={success.payment_url}
+        onCancel={() => {
+          clearCart();
+          router.push("/");
+        }}
+      />
+    );
+  }
+
+  if (success?.payment_method === "cod") {
     return (
       <OrderSuccess
         orderId={success.order_id}
         total={success.total}
-        paymentMethod={success.payment_method}
         onContinue={() => {
           clearCart();
           router.push("/");
@@ -182,12 +254,9 @@ export default function CheckoutPage() {
         }
 
         const { EncData, MerchantId, BankId, TerminalId } = payData;
-        window.open(
-          `https://payment.bkarogyam.com/process_data/?EncData=${EncData}&MerchantId=${MerchantId}&BankId=${BankId}&TerminalId=${TerminalId}`,
-          "_blank"
-        );
+        const paymentUrl = `https://payment.bkarogyam.com/process_data/?EncData=${EncData}&MerchantId=${MerchantId}&BankId=${BankId}&TerminalId=${TerminalId}`;
         setPaymentModalOpen(false);
-        setSuccess({ order_id: orderData.order_id, total: grandTotal, payment_method: "online" });
+        setSuccess({ order_id: orderData.order_id, total: grandTotal, payment_method: "online", payment_url: paymentUrl });
       } else {
         setPaymentModalOpen(false);
         setSuccess({ order_id: orderData.order_id, total: grandTotal, payment_method: "cod" });

@@ -93,7 +93,7 @@ export async function POST(request) {
       const data = await res.json();
       return NextResponse.json({
         success: true,
-        order_id: data.id ?? data.order_id,
+        order_id: data.id ?? data.order_id ?? data.order?.id,
         order: data,
       });
     }
