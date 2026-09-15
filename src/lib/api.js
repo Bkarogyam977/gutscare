@@ -1,6 +1,6 @@
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
-  "https://healdiway.bkarogyam.com/erp-api";
+  "https://api.arogyamission.com/erp-api";
 
 export const PRODUCT_ID = Number(process.env.NEXT_PUBLIC_PRODUCT_ID) || 15371;
 

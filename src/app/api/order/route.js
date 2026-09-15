@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "https://healdiway.bkarogyam.com/erp-api";
+  process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.arogyamission.com/erp-api";
 
 async function getOrderStatusId() {
   try {
@@ -51,6 +51,7 @@ export async function POST(request) {
     city: body.city,
     state: body.state,
     pincode: body.pincode,
+    country: 1,
   };
 
   const cart_list = body.items.map((item) => ({
@@ -98,10 +99,14 @@ export async function POST(request) {
       });
     }
 
-    const errText = await res.text().catch(() => "");
-    console.error("ERP order error:", res.status, errText);
+    let errText = "";
+    try { errText = await res.text(); } catch {}
+    console.error("=== ERP ORDER FAILED ===");
+    console.error("Status:", res.status);
+    console.error("Response:", errText);
+    console.error("Payload sent:", JSON.stringify({ addressdata, cart_list, order_data }, null, 2));
     return NextResponse.json(
-      { error: "Failed to place order. Please try again." },
+      { error: "Failed to place order. Please try again.", debug: { status: res.status, response: errText } },
       { status: 502 }
     );
   } catch (err) {

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "https://healdiway.bkarogyam.com/erp-api";
+  process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.arogyamission.com/erp-api";
 
 export async function POST(request) {
   let body;

@@ -5,7 +5,7 @@ import { PRODUCT_ID } from "@/lib/api";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
-  "https://healdiway.bkarogyam.com/erp-api";
+  "https://api.arogyamission.com/erp-api";
 
 const STAR_LABELS = ["Terrible", "Poor", "Okay", "Good", "Excellent"];
 
